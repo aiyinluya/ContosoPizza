@@ -17,6 +17,19 @@ builder.Services.AddSwaggerGen( options => {
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
     }
 );
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy
+        (name: "myCors",
+            builde =>
+            {
+                builde.WithOrigins("*", "*", "*")
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+            }
+        );
+});
 
 var app = builder.Build();
 
@@ -30,7 +43,11 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+
 app.UseHttpsRedirection();
+
+app.UseCors("myCors");
+// app.UseCors();
 
 app.UseAuthorization();
 
